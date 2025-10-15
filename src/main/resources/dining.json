@@ -1,0 +1,13 @@
+{
+  "#dining:zombies": [ "minecraft:cake" ],
+  "#dining:skeletons": [ "minecraft:cake" ],
+  "#dining:slimes": [ "minecraft:cake" ],
+  "minecraft:creeper": [ "minecraft:cake" ],
+  "minecraft:enderman": [ "minecraft:cake" ],
+  "minecraft:blaze": [ "minecraft:cake" ],
+
+  "npc:warrior_npc": [
+    "kaleidoscope_cookery:sweet_and_sour_ender_pearls",
+    "kaleidoscope_cookery:golden_salad"
+  ]
+}

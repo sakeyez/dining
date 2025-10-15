@@ -1,0 +1,16 @@
+# IDE
+.idea/
+*.iml
+
+# Build outputs
+build/
+out/
+jars/
+
+# Gradle cache (IMPORTANT: Note the dot!)
+.gradle/
+
+# MC dev environment
+run/
+runs/
+logs/
