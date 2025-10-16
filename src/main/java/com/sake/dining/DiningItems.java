@@ -22,7 +22,10 @@ public class DiningItems {
     public static final RegistryObject<Item> BLAZE_TOKEN = ITEMS.register("blaze_token", () ->
             new Item(new Item.Properties().stacksTo(64)));
 
-    // ------- 这里是修复点，直接传 RegistryObject -------
+    public static final RegistryObject<Item> COIN = ITEMS.register("coin", () ->
+            new Item(new Item.Properties().stacksTo(64)));
+    public static final RegistryObject<Item> POWDER = ITEMS.register("powder", () ->
+            new Item(new Item.Properties().stacksTo(64)));
 
 
 
