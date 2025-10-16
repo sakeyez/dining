@@ -16,6 +16,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+import com.sake.npc.network.ClientboundDisplayItemActivationPacket;
+import com.sake.npc.network.NpcPacketHandler;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.PacketDistributor;
 
 import java.util.List;
 
@@ -50,8 +54,14 @@ public class BrokenSummonItem extends Item {
                     // 【特效优化】增加粒子数量，让效果更华丽
                     serverLevel.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, player.getX(), player.getY(1.2), player.getZ(), 80, 0.5, 0.8, 0.5, 0.15);
                 }
-
+                if (player instanceof ServerPlayer serverPlayer) {
+                    NpcPacketHandler.CHANNEL.send(
+                            PacketDistributor.PLAYER.with(() -> serverPlayer),
+                            new ClientboundDisplayItemActivationPacket(repairedStack)
+                    );
+                }
                 player.sendSystemMessage(Component.literal("§a灵魂连接被重塑了！"));
+
 
                 return InteractionResultHolder.success(repairedStack);
             }

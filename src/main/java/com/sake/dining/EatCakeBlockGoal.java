@@ -36,7 +36,8 @@ public class EatCakeBlockGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return isSupportedEater(mob) && findNearestFoodBlock().isPresent();
+        // 【核心修正】直接调用新的查询方法
+        return !FeedingConfig.getFoodBlocks(mob).isEmpty() && findNearestFoodBlock().isPresent();
     }
 
     @Override
@@ -97,15 +98,15 @@ public class EatCakeBlockGoal extends Goal {
             if (bites < maxBites) {
                 BlockState newState = state.setValue(bitesProp, bites + 1);
                 world.setBlock(targetPos, newState, 3);
-                onEatFood(world, targetPos, state, false); // 传递 state
+                onEatFood(world, targetPos, state, false);
             } else {
                 world.removeBlock(targetPos, false);
-                onEatFood(world, targetPos, state, true); // 传递 state
+                onEatFood(world, targetPos, state, true);
                 targetPos = null;
             }
         } else {
             world.removeBlock(targetPos, false);
-            onEatFood(world, targetPos, state, true); // 传递 state
+            onEatFood(world, targetPos, state, true);
             targetPos = null;
         }
     }
@@ -147,9 +148,9 @@ public class EatCakeBlockGoal extends Goal {
         Level world = mob.level();
         int range = 6;
         int verticalRange = 3;
-        ResourceLocation mobId = mob.getType().builtInRegistryHolder().key().location();
-        List<ResourceLocation> allowedFoods = FeedingConfig.getFoodBlocks(mobId);
-        if (allowedFoods == null || allowedFoods.isEmpty()) return Optional.empty();
+        // 【核心修正】调用新的查询方法
+        List<ResourceLocation> allowedFoods = FeedingConfig.getFoodBlocks(mob);
+        if (allowedFoods.isEmpty()) return Optional.empty();
         return BlockPos.findClosestMatch(mob.blockPosition(), range, verticalRange, pos -> {
             BlockState state = world.getBlockState(pos);
             ResourceLocation blockId = state.getBlock().builtInRegistryHolder().key().location();
@@ -157,23 +158,16 @@ public class EatCakeBlockGoal extends Goal {
         });
     }
 
-    public static boolean isSupportedEater(Mob mob) {
-        ResourceLocation mobId = mob.getType().builtInRegistryHolder().key().location();
-        List<ResourceLocation> allowedFoods = FeedingConfig.getFoodBlocks(mobId);
-        return allowedFoods != null && !allowedFoods.isEmpty();
-    }
+    // 这个方法不再需要，因为我们在 canUse 中直接调用了新的 getFoodBlocks
+    // public static boolean isSupportedEater(Mob mob) { ... }
 
-    // [修改点 1]: 修改方法签名，增加 BlockState 参数
     private void onEatFood(Level world, BlockPos pos, BlockState eatenState, boolean finished) {
         if (!world.isClientSide) {
             mob.heal(2.0F);
             mob.getPersistentData().putBoolean("dining_fed", true);
 
             if (finished) {
-                // [修改点 2]: 在这里广播我们的自定义事件！
                 MinecraftForge.EVENT_BUS.post(new MobFinishedEatingEvent(mob, pos, eatenState));
-
-                // 保留你原有的掉落物逻辑，如果你不需要可以让 getThankYouToken() 返回 null
                 ItemStack token = getThankYouToken();
                 if (token != null) {
                     world.addFreshEntity(new ItemEntity(world, mob.getX(), mob.getY() + 0.5, mob.getZ(), token));
@@ -182,7 +176,6 @@ public class EatCakeBlockGoal extends Goal {
         }
     }
 
-    // [修改点 3]: 新增一个方法来获取掉落物，方便管理
     private ItemStack getThankYouToken() {
         if (mob.getType() == EntityType.ZOMBIE) {
             return new ItemStack(DiningItems.ZOMBIE_TOKEN.get());
@@ -197,6 +190,6 @@ public class EatCakeBlockGoal extends Goal {
         } else if (mob.getType() == EntityType.BLAZE) {
             return new ItemStack(DiningItems.BLAZE_TOKEN.get());
         }
-        return null; // 默认不掉落
+        return null;
     }
 }

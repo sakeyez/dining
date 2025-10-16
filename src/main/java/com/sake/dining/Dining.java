@@ -2,7 +2,6 @@ package com.sake.dining;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.commands.Commands;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Mob;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -13,49 +12,30 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import org.slf4j.Logger;
 
-// 创造栏相关
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-
 @Mod(Dining.MODID)
 public class Dining {
     public static final String MODID = "dining";
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public Dining() {
-        // 注册物品
         DiningItems.register();
         DiningCreativeTab.register();
 
-        // **初始化时加载配置**
         FeedingConfig.load();
         LOGGER.info("[Dining] 配置文件已加载完成。");
 
-        // 下面这句只在需要把物品加到其他原版栏位时用
-        // FMLJavaModLoadingContext.get().getModEventBus().addListener(this::addCreative);
-
-        // Forge 事件总线注册
         MinecraftForge.EVENT_BUS.register(this);
     }
-
-    // 如果你希望继续把物品放到原版食物栏，可以保留这个函数并上面的addListener；如果不用就删掉
-    /*
-    private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTab().equals(CreativeModeTabs.FOOD_AND_DRINKS)) {
-            event.accept(DiningItems.ZOMBIE_TOKEN.get());
-            event.accept(DiningItems.SKELETON_TOKEN.get());
-            event.accept(DiningItems.CREEPER_TOKEN.get());
-            event.accept(DiningItems.ENDERMAN_TOKEN.get());
-            event.accept(DiningItems.SLIME_TOKEN.get());
-            event.accept(DiningItems.BLAZE_TOKEN.get());
-        }
-    }
-    */
 
     // 给怪物添加吃东西的 Goal
     @SubscribeEvent
     public void onEntityJoin(EntityJoinLevelEvent event) {
         if (!(event.getEntity() instanceof Mob mob)) return;
-        if (EatCakeBlockGoal.isSupportedEater(mob)) {
+
+        // 【核心修正】使用 FeedingConfig.getFoodBlocks 来判断是否是支持的生物
+        // 如果能从配置中找到该生物的食物列表（即使是空的），就说明它是被支持的。
+        // 我们检查列表是否为非空，来决定是否添加AI。
+        if (!FeedingConfig.getFoodBlocks(mob).isEmpty()) {
             mob.goalSelector.addGoal(1, new EatCakeBlockGoal(mob));
         }
     }
@@ -67,7 +47,6 @@ public class Dining {
                 Commands.literal("reload_dining")
                         .requires(cs -> cs.hasPermission(2))
                         .executes(ctx -> {
-                            // **重新加载配置**
                             FeedingConfig.load();
                             ctx.getSource().sendSuccess(
                                     () -> net.minecraft.network.chat.Component.literal("Dining配置已重载!"),

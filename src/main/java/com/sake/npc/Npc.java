@@ -3,6 +3,7 @@ package com.sake.npc;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import com.sake.npc.network.NpcPacketHandler;
 
 @Mod("npc")
 public class Npc {
@@ -11,6 +12,6 @@ public class Npc {
         NpcEntities.register(eventBus);
         NpcItems.register(eventBus);
 
-
+        NpcPacketHandler.register();
     }
 }
