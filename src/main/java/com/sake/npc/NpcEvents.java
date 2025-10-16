@@ -7,6 +7,7 @@ import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraft.world.entity.monster.WitherSkeleton;
 
 @Mod.EventBusSubscriber(modid = "npc", bus = Mod.EventBusSubscriber.Bus.MOD)
 public class NpcEvents {
@@ -28,5 +29,13 @@ public class NpcEvents {
                 .add(Attributes.FOLLOW_RANGE, 32.0)
                 // .add(ForgeMod.ATTACK_RANGE.get(), 0.0) // <-- 移除这一行
                 .build());
+
+        event.put(NpcEntities.WITHER_WARRIOR_NPC.get(), WitherSkeleton.createAttributes()
+                .add(Attributes.MAX_HEALTH, 20.0)
+                .add(Attributes.ATTACK_DAMAGE, 4.0) // 凋零骷髅基础攻击力更高
+                .add(Attributes.MOVEMENT_SPEED, 0.25)
+                .add(Attributes.FOLLOW_RANGE, 32.0)
+                .build());
+
     }
 }

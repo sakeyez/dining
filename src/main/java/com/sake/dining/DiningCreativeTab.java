@@ -35,6 +35,8 @@ public class DiningCreativeTab {
                         output.accept(NpcItems.ENDERMAN_NPC_SPAWN_EGG.get());
                         output.accept(NpcItems.WARRIOR_NPC_SPAWN_EGG.get());
                         output.accept(NpcItems.WARRIOR_SUMMON_ITEM.get());
+                        output.accept(NpcItems.WITHER_WARRIOR_NPC_SPAWN_EGG.get());
+                        output.accept(NpcItems.WITHER_WARRIOR_SUMMON_ITEM.get());
                     })
                     .build()
     );

@@ -14,6 +14,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
+import com.sake.npc.wither_warrior.BrokenWitherWarriorSummonItem;
+import com.sake.npc.wither_warrior.WitherWarriorSummonItem;
 
 import java.util.List;
 
@@ -36,6 +38,19 @@ public class NpcItems {
     // 【核心修正】使用我们新的 BrokenSummonItem 类
     public static final RegistryObject<Item> BROKEN_WARRIOR_SUMMON_ITEM = ITEMS.register("broken_warrior_summon_item",
             () -> new BrokenSummonItem(new Item.Properties().stacksTo(1))
+    );
+
+    // ... (WARRIOR_NPC_SPAWN_EGG) ...
+    public static final RegistryObject<Item> WITHER_WARRIOR_NPC_SPAWN_EGG = ITEMS.register("wither_warrior_npc_spawn_egg", () -> new ForgeSpawnEggItem(NpcEntities.WITHER_WARRIOR_NPC, 0x141414, 0x494949, new Item.Properties()));
+
+    // ... (WARRIOR_SUMMON_ITEM) ...
+    public static final RegistryObject<Item> WITHER_WARRIOR_SUMMON_ITEM = ITEMS.register("wither_warrior_summon_item",
+            () -> new WitherWarriorSummonItem(new Item.Properties().stacksTo(1))
+    );
+
+    // ... (BROKEN_WARRIOR_SUMMON_ITEM) ...
+    public static final RegistryObject<Item> BROKEN_WITHER_WARRIOR_SUMMON_ITEM = ITEMS.register("broken_wither_warrior_summon_item",
+            () -> new BrokenWitherWarriorSummonItem(new Item.Properties().stacksTo(1))
     );
 
     public static void register(IEventBus bus) {

@@ -1,8 +1,8 @@
-package com.sake.npc.warrior;
+package com.sake.npc.wither_warrior;
 
 import com.sake.npc.NpcItems;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.particles.ParticleTypes; // 确保导入
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -19,8 +19,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class BrokenSummonItem extends Item {
-    public BrokenSummonItem(Properties properties) {
+public class BrokenWitherWarriorSummonItem extends Item {
+    public BrokenWitherWarriorSummonItem(Properties properties) {
         super(properties);
     }
 
@@ -30,16 +30,9 @@ public class BrokenSummonItem extends Item {
         ItemStack offhandStack = player.getItemInHand(InteractionHand.OFF_HAND);
 
         if (!level.isClientSide && offhandStack.is(Items.TOTEM_OF_UNDYING)) {
-
             if (brokenStack.hasTag()) {
-                System.out.println("[Warrior DEBUG] Repair attempt successful.");
-
-                ItemStack repairedStack = new ItemStack(NpcItems.WARRIOR_SUMMON_ITEM.get());
+                ItemStack repairedStack = new ItemStack(NpcItems.WITHER_WARRIOR_SUMMON_ITEM.get());
                 repairedStack.setTag(brokenStack.getTag().copy());
-
-                // 【核心修正】我们不再移除 WarriorData！
-                // 这样，修复好的核心就直接处于“伙伴已收回，可以召唤”的正确状态。
-                // repairedStack.getTag().remove("WarriorData"); // <-- 已删除这行错误代码
 
                 if (!player.getAbilities().instabuild) {
                     offhandStack.shrink(1);
@@ -47,16 +40,12 @@ public class BrokenSummonItem extends Item {
 
                 player.playSound(SoundEvents.TOTEM_USE, 1.0F, 1.0F);
                 if (level instanceof ServerLevel serverLevel) {
-                    // 【特效优化】增加粒子数量，让效果更华丽
                     serverLevel.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, player.getX(), player.getY(1.2), player.getZ(), 80, 0.5, 0.8, 0.5, 0.15);
                 }
-
                 player.sendSystemMessage(Component.literal("§a灵魂连接被重塑了！"));
-
                 return InteractionResultHolder.success(repairedStack);
             }
         }
-
         return InteractionResultHolder.fail(brokenStack);
     }
 
