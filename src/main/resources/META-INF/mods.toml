@@ -5,19 +5,26 @@ license="MIT"
 [[mods]]
 modId="dining"
 version="1.0"
-displayName="dining"
-displayURL="https://your-mod-url.com"
-logoFile="logo.png"
+displayName="Dining"
 authors="sake"
 description='''
-mobs can have a meal
+Mobs can have a meal.
 '''
 
 [[mods]]
 modId="npc"
 version="1.0.0"
-displayName="npc"
+displayName="NPC"
 authors="sake"
 description='''
-自定义NPC模组。
+A custom NPC module.
+'''
+
+[[mods]]
+modId="factions"
+version="1.0.0"
+displayName="Factions"
+authors="sake"
+description='''
+The mob factions and friendship module.
 '''

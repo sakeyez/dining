@@ -40,8 +40,32 @@ public class PlayerRightClickMobEvent {
         }
 
         ItemStack playerStack = player.getItemInHand(hand).copy();
+
         if (playerStack.isEmpty()) {
-            return;
+            // 定义一个装备槽位的检查顺序
+            EquipmentSlot[] slotsToCheck = {
+                    EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET,
+                    EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND
+            };
+
+            for (EquipmentSlot slot : slotsToCheck) {
+                ItemStack targetStack = target.getItemBySlot(slot);
+                // 如果当前槽位有装备
+                if (!targetStack.isEmpty()) {
+                    // 执行交换
+                    player.setItemInHand(hand, targetStack.copy());
+                    target.setItemSlot(slot, ItemStack.EMPTY);
+
+                    // 添加反馈
+                    player.getCooldowns().addCooldown(targetStack.getItem(), 10);
+                    player.playSound(SoundEvents.ARMOR_EQUIP_GENERIC, 1.0F, 1.0F);
+
+                    // 取消原始事件，确保高优先级
+                    event.setCanceled(true);
+                    return; // 成功卸下一件后就结束
+                }
+            }
+            return; // 如果遍历完所有槽位都是空的，就什么也不做
         }
 
         // 3. 判断要交换的槽位

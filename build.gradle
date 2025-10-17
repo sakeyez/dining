@@ -3,7 +3,7 @@ plugins {
     id 'idea'
     id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
-    id 'org.spongepowered.mixin' version '0.7.+'
+    //id 'org.spongepowered.mixin' version '0.7.+'
 }
 
 group = mod_group_id
@@ -19,6 +19,7 @@ minecraft {
     runs {
         configureEach {
             jvmArgs = [
+                    "-Dnet.minecraftforge.gradle.check.certs=false",
                     "-XX:+IgnoreUnrecognizedVMOptions",
                     "-XX:+AllowEnhancedClassRedefinition"
             ]
@@ -60,14 +61,14 @@ minecraft {
 }
 
 
-mixin {
-    add sourceSets.main, "${mod_id}.refmap.json"
-    config "${mod_id}.mixins.json"
-
-    debug.verbose = true
-    debug.export = true
-    hotSwap = true
-}
+//mixin {
+//   add sourceSets.main, "${mod_id}.refmap.json"
+//   config "${mod_id}.mixins.json"
+//
+//  debug.verbose = true
+//debug.export = true
+//    hotSwap = true
+//}
 
 repositories {
     maven {
@@ -121,7 +122,7 @@ repositories {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    //annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // JEI
     compileOnly fg.deobf("mezz.jei:jei-1.20.1-common-api:${jei_version}")

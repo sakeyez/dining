@@ -1,38 +1,44 @@
 package com.sake.npc;
 
 import com.sake.dining.event.MobFinishedEatingEvent;
-import com.sake.npc.zombie_warrior.WarriorNPCEntity;
 import com.sake.npc.wither_warrior.WitherWarriorNPCEntity;
+import com.sake.npc.wither_warrior.WitherWarriorSummonItem;
+import com.sake.npc.zombie_warrior.WarriorNPCEntity;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraft.nbt.CompoundTag;
-import com.sake.npc.wither_warrior.WitherWarriorSummonItem;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber(modid = "npc", bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class NpcUpgradeHandler {
-    // 僵尸战士的升级食物
+
+    private static final List<Consumer<TickEvent.ServerTickEvent>> delayedTasks = new ArrayList<>();
+
+    // ... (升级相关的代码保持不变) ...
     private static final ResourceLocation PEARL_MEAT_ID = ResourceLocation.fromNamespaceAndPath("kaleidoscope_cookery", "sweet_and_sour_ender_pearls");
     private static final ResourceLocation GOLDEN_SALAD_ID = ResourceLocation.fromNamespaceAndPath("kaleidoscope_cookery", "golden_salad");
-
-    // 【核心修改 1】凋零骷髅战士的升级食物
     private static final ResourceLocation FONDANT_SPIDER_EYE_ID = ResourceLocation.fromNamespaceAndPath("kaleidoscope_cookery", "fondant_spider_eye");
     private static final ResourceLocation KNIGHT_STEAK_ID = ResourceLocation.fromNamespaceAndPath("kaleidoscope_cookery", "pan_seared_knight_steak");
 
     @SubscribeEvent
     public static void onMobFinishedEating(MobFinishedEatingEvent event) {
-        // 僵尸战士的逻辑
+        // ... (这部分代码没有改动，保持原样) ...
         if (event.getMob() instanceof WarriorNPCEntity w && !w.level().isClientSide()) {
             ResourceLocation f = BuiltInRegistries.BLOCK.getKey(event.getFoodState().getBlock());
             Player p = w.level().getNearestPlayer(w, 16);
@@ -55,9 +61,7 @@ public class NpcUpgradeHandler {
                 w.setLevel(n);
                 if (p != null) p.sendSystemMessage(Component.literal(m));
             }
-        }
-        // 【核心修改 2】凋零骷髅战士的逻辑
-        else if (event.getMob() instanceof WitherWarriorNPCEntity w && !w.level().isClientSide()) {
+        } else if (event.getMob() instanceof WitherWarriorNPCEntity w && !w.level().isClientSide()) {
             ResourceLocation f = BuiltInRegistries.BLOCK.getKey(event.getFoodState().getBlock());
             Player p = w.level().getNearestPlayer(w, 16);
             int l = w.getLevel();
@@ -73,9 +77,9 @@ public class NpcUpgradeHandler {
                 }
             }
             if (n != -1) {
-                w.playSound(SoundEvents.WITHER_SPAWN, 1.0F, 1.0F); // 使用凋零的音效
+                w.playSound(SoundEvents.WITHER_SPAWN, 1.0F, 1.0F);
                 if (w.level() instanceof ServerLevel s)
-                    s.sendParticles(ParticleTypes.SOUL, w.getRandomX(1.0), w.getY(0.5), w.getRandomZ(1.0), 50, 0.3, 0.5, 0.3, 0.5); // 使用灵魂粒子
+                    s.sendParticles(ParticleTypes.SOUL, w.getRandomX(1.0), w.getY(0.5), w.getRandomZ(1.0), 50, 0.3, 0.5, 0.3, 0.5);
                 w.setLevel(n);
                 if (p != null) p.sendSystemMessage(Component.literal(m));
             }
@@ -84,49 +88,81 @@ public class NpcUpgradeHandler {
 
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
-        if (event.getEntity().level().isClientSide()) {
+        LivingEntity entity = event.getEntity();
+        if (entity.level().isClientSide()) {
+            return;
+        }
+        if (event.isCanceled()) {
             return;
         }
 
-        if (event.getEntity() instanceof TamableAnimal warrior) {
+        if (entity instanceof TamableAnimal warrior) {
             boolean isCorrectWarriorType = warrior instanceof WarriorNPCEntity || warrior instanceof WitherWarriorNPCEntity;
             if (!isCorrectWarriorType) {
                 return;
             }
 
-            if (warrior.getOwner() instanceof Player owner) {
-                UUID warriorUUID = warrior.getUUID();
+            // 将检查逻辑放入一个延迟任务中
+            synchronized (delayedTasks) {
+                delayedTasks.add(tick -> {
+                    // === 【核心修复】 ===
+                    // 在下一个游戏刻，我们检查这个生物体是否“真的死了”。
+                    // 真正死亡的生物生命值会 <= 0。
+                    // 被复活的生物生命值会 > 0。
+                    // isDeadOrDying() 方法本质上就是检查 getHealth() <= 0，这是最可靠的标准。
+                    if (warrior.isDeadOrDying()) {
+                        handleBrokenCore(warrior);
+                    }
+                });
+            }
+        }
+    }
 
-                for (int i = 0; i < owner.getInventory().getContainerSize(); ++i) {
-                    ItemStack stack = owner.getInventory().getItem(i);
+    // 监听服务器的每个tick，用于执行我们的延迟任务
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
+        if (event.phase == TickEvent.Phase.START) {
+            synchronized (delayedTasks) {
+                if (!delayedTasks.isEmpty()) {
+                    delayedTasks.forEach(task -> task.accept(event));
+                    delayedTasks.clear();
+                }
+            }
+        }
+    }
 
-                    boolean isNormalWarriorSummonItem = stack.getItem() instanceof com.sake.npc.zombie_warrior.WarriorSummonItem;
-                    boolean isWitherWarriorSummonItem = stack.getItem() instanceof WitherWarriorSummonItem;
+    // 将破碎核心的逻辑提取到一个单独的方法中，保持代码整洁
+    private static void handleBrokenCore(TamableAnimal warrior) {
+        if (warrior.getOwner() instanceof Player owner) {
+            UUID warriorUUID = warrior.getUUID();
 
-                    if (isNormalWarriorSummonItem || isWitherWarriorSummonItem) {
-                        CompoundTag tag = stack.getTag();
-                        if (tag != null && tag.hasUUID("WarriorUUID") && tag.getUUID("WarriorUUID").equals(warriorUUID)) {
+            for (int i = 0; i < owner.getInventory().getContainerSize(); ++i) {
+                ItemStack stack = owner.getInventory().getItem(i);
 
-                            ItemStack brokenStack;
-                            if (warrior instanceof WarriorNPCEntity) {
-                                brokenStack = new ItemStack(NpcItems.BROKEN_WARRIOR_SUMMON_ITEM.get());
-                            } else {
-                                brokenStack = new ItemStack(NpcItems.BROKEN_WITHER_WARRIOR_SUMMON_ITEM.get());
-                            }
+                boolean isNormalWarriorSummonItem = stack.getItem() instanceof com.sake.npc.zombie_warrior.WarriorSummonItem;
+                boolean isWitherWarriorSummonItem = stack.getItem() instanceof WitherWarriorSummonItem;
 
-                            CompoundTag warriorData = new CompoundTag();
-                            warrior.addAdditionalSaveData(warriorData);
-
-                            CompoundTag brokenTag = new CompoundTag();
-                            brokenTag.putUUID("WarriorUUID", warriorUUID);
-                            brokenTag.put("WarriorData", warriorData);
-                            brokenStack.setTag(brokenTag);
-
-                            owner.getInventory().setItem(i, brokenStack);
-                            owner.playSound(SoundEvents.GLASS_BREAK, 1.0F, 1.0F);
-                            owner.sendSystemMessage(Component.literal("§c你与战士伙伴的灵魂连接断开了..."));
-                            return;
+                if (isNormalWarriorSummonItem || isWitherWarriorSummonItem) {
+                    CompoundTag tag = stack.getTag();
+                    if (tag != null && tag.hasUUID("WarriorUUID") && tag.getUUID("WarriorUUID").equals(warriorUUID)) {
+                        ItemStack brokenStack;
+                        if (warrior instanceof WarriorNPCEntity) {
+                            brokenStack = new ItemStack(NpcItems.BROKEN_WARRIOR_SUMMON_ITEM.get());
+                        } else {
+                            brokenStack = new ItemStack(NpcItems.BROKEN_WITHER_WARRIOR_SUMMON_ITEM.get());
                         }
+
+                        CompoundTag warriorData = new CompoundTag();
+                        warrior.addAdditionalSaveData(warriorData);
+                        CompoundTag brokenTag = new CompoundTag();
+                        brokenTag.putUUID("WarriorUUID", warriorUUID);
+                        brokenTag.put("WarriorData", warriorData);
+                        brokenStack.setTag(brokenTag);
+
+                        owner.getInventory().setItem(i, brokenStack);
+                        owner.playSound(SoundEvents.GLASS_BREAK, 1.0F, 1.0F);
+                        owner.sendSystemMessage(Component.literal("§c你与战士伙伴的灵魂连接断开了..."));
+                        return;
                     }
                 }
             }
