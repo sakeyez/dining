@@ -1,7 +1,7 @@
-// 文件路径: src/main/java/com/sake/factions/FactionHandler.java
 package com.sake.factions;
 
 import com.sake.dining.DiningItems;
+import com.sake.factions.advancement.FactionTriggers;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.commands.CommandSourceStack;
@@ -36,35 +36,16 @@ import java.util.stream.Collectors;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class FactionHandler {
 
-    // ... 其他代码都正确，无需改动 ...
-
-    private static void grantAdvancement(Player player, String factionId) {
-        if (player instanceof ServerPlayer serverPlayer) {
-            ResourceLocation advId = ResourceLocation.fromNamespaceAndPath(Factions.MODID, "become_friend_with_" + factionId);
-            Advancement advancement = serverPlayer.getServer().getAdvancements().getAdvancement(advId);
-            if (advancement != null) {
-                AdvancementProgress progress = serverPlayer.getAdvancements().getOrStartProgress(advancement);
-                if (!progress.isDone()) {
-                    // 当我们完成成就的所有标准后，原版游戏会自动处理弹窗和广播
-                    progress.getRemainingCriteria().forEach(progress::grantProgress);
-
-                    // 【最终修复】删除下面这行手动发送消息的代码！
-                    // player.sendSystemMessage(Component.translatable("advancements.factions.friendship." + factionId + ".description"));
-                }
-            }
-        }
-    }
-
-    // ... 其他所有未改动的方法保持原样 ...
-
-    //为了方便你完整替换，下面是文件的全部内容
-
+    // (内部派系定义等代码保持不变...)
     public static class Faction {
         public final String id;
         public final Set<String> memberIds = new HashSet<>();
+
         public Faction(String id, Collection<String> initialMembers) {
             this.id = id;
-            if (initialMembers != null) { this.memberIds.addAll(initialMembers); }
+            if (initialMembers != null) {
+                this.memberIds.addAll(initialMembers);
+            }
         }
     }
 
@@ -159,15 +140,24 @@ public class FactionHandler {
         return PERSISTED_DATA.playerFriendlyFactions.getOrDefault(playerId, Collections.emptySet()).contains(factionId);
     }
 
+    /**
+     * 【核心修改】
+     * 将一个玩家设置为与某个派系友好，并激活自定义的成就触发器。
+     */
     public static void makePlayerFriendly(Player player, String factionId) {
-        if (PERSISTED_DATA == null) return;
+        // 确保数据已加载，并且我们是在服务端操作一个服务端玩家
+        if (PERSISTED_DATA == null || !(player instanceof ServerPlayer serverPlayer)) return;
+
         Set<String> friendlySet = PERSISTED_DATA.playerFriendlyFactions.computeIfAbsent(player.getUUID(), k -> new HashSet<>());
         if (friendlySet.add(factionId)) {
             setDirty();
-            grantAdvancement(player, factionId);
+            // 直接调用我们自定义触发器的 trigger 方法！
+            // Minecraft 会自动处理剩下的所有事情，包括弹窗和广播。
+            FactionTriggers.BECAME_FRIENDLY.trigger(serverPlayer, factionId);
         }
     }
 
+    // (所有事件监听方法 onLivingChangeTarget, onPlayerPickupItem, onPlayerHurt 等保持完全不变)
     @SubscribeEvent
     public static void onLivingChangeTarget(LivingChangeTargetEvent event) {
         if (!(event.getNewTarget() instanceof ServerPlayer player) || event.getEntity() instanceof Player) return;
@@ -228,6 +218,7 @@ public class FactionHandler {
         }
     }
 
+    // (所有命令相关的方法保持完全不变)
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event) {
         event.getDispatcher().register(

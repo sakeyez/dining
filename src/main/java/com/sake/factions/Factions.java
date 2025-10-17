@@ -4,6 +4,7 @@ package com.sake.factions;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
+import com.sake.factions.advancement.FactionTriggers;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ public class Factions {
         // FactionHandler 有自己的 @Mod.EventBusSubscriber 注解，会自动注册。
         // 这个 Factions 类现在也因为上面的新注解而自动注册了。
         LOGGER.info("[Factions] 模块加载成功！");
+        FactionTriggers.register();
     }
 
     // 这两个静态方法现在可以被正确地找到了！

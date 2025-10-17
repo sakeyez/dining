@@ -5,16 +5,16 @@ license="MIT"
 [[mods]]
 modId="dining"
 version="1.0"
-displayName="Dining"
+displayName="Friendly_mobs"
 authors="sake"
 description='''
 Mobs can have a meal.
 '''
 
 [[mods]]
-modId="npc"
+modId="friendly_npc"
 version="1.0.0"
-displayName="NPC"
+displayName="Friendly_mobs"
 authors="sake"
 description='''
 A custom NPC module.
@@ -23,7 +23,7 @@ A custom NPC module.
 [[mods]]
 modId="factions"
 version="1.0.0"
-displayName="Factions"
+displayName="Friendly_mobs"
 authors="sake"
 description='''
 The mob factions and friendship module.
