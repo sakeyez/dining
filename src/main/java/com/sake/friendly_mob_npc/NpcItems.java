@@ -12,7 +12,7 @@ import com.sake.friendly_mob_npc.wither_warrior.BrokenWitherWarriorSummonItem;
 import com.sake.friendly_mob_npc.wither_warrior.WitherWarriorSummonItem;
 
 public class NpcItems {
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, "npc");
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, "friendly_mob_npc");
 
     // ... (所有刷怪蛋的注册保持不变) ...
     public static final RegistryObject<Item> ZOMBIE_NPC_SPAWN_EGG = ITEMS.register("zombie_npc_spawn_egg", () -> new ForgeSpawnEggItem(NpcEntities.ZOMBIE_NPC, 0x00a000, 0x799c65, new Item.Properties()));

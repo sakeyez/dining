@@ -80,7 +80,7 @@ public class PlayerRightClickMobEvent {
 
         // 4. 特殊规则：检查目标是否是你的自定义NPC
         // 我们通过检查实体的类所在的包名来判断
-        boolean isCustomNpc = target.getClass().getPackageName().startsWith("com.sake.npc");
+        boolean isCustomNpc = target.getClass().getPackageName().startsWith("com.sake.friendly_mob_npc");
 
         // 如果是自定义NPC，并且玩家试图交换主手物品，则直接阻止操作。
         if (isCustomNpc && slotToSwap == EquipmentSlot.MAINHAND) {

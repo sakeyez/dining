@@ -1,4 +1,4 @@
-// 文件路径: src/main/java/com/sake/npc/zombie/ai/ZombieFarmerGoal.java
+// 文件路径: src/main/java/com/sake/friendly_mob_npc/zombie/ai/ZombieFarmerGoal.java
 
 package com.sake.friendly_mob_npc.zombie.ai;
 

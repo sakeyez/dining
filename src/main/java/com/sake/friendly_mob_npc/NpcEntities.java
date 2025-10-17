@@ -16,8 +16,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class NpcEntities {
-    // 确认这里的 modId 是 "friendly_npc"
-    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, "friendly_npc");
+    // 确认这里的 modId 是 "friendly_mob_npc"
+    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, "friendly_mob_npc");
 
     // 【核心修正】将所有 .build() 方法中的ID改为只有路径名，不带命名空间
     public static final RegistryObject<EntityType<ZombieNPCEntity>> ZOMBIE_NPC = ENTITIES.register("zombie_npc",

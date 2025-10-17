@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-@Mod.EventBusSubscriber(modid = "npc", bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = "friendly_mob_npc", bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class NpcUpgradeHandler {
 
     private static final List<Consumer<TickEvent.ServerTickEvent>> delayedTasks = new ArrayList<>();

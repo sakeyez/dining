@@ -6,10 +6,10 @@
   "minecraft:enderman": [ "minecraft:cake" ],
   "minecraft:blaze": [ "minecraft:cake" ],
 
-  "npc:warrior_npc": [
+  "friendly_mob_npc:warrior_npc": [
     "kaleidoscope_cookery:sweet_and_sour_ender_pearls",
     "kaleidoscope_cookery:golden_salad"
-  "npc:wither_warrior_npc": [
+  "friendly_mob_npc:wither_warrior_npc": [
     "kaleidoscope_cookery:fondant_spider_eye",
     "kaleidoscope_cookery:pan_seared_knight_steak"
 

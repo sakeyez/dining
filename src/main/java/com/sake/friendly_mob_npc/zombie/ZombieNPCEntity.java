@@ -1,4 +1,4 @@
-// 文件路径: src/main/java/com/sake/npc/zombie/ZombieNPCEntity.java
+// 文件路径: src/main/java/com/sake/friendly_mob_npc/zombie/ZombieNPCEntity.java
 
 package com.sake.friendly_mob_npc.zombie;
 

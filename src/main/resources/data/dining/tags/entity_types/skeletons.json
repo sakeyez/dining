@@ -5,6 +5,6 @@
     "minecraft:wither_skeleton",
     "minecraft:stray",
     "minecraft:bogged",
-    "friendly_npc:skeleton_npc"
+    "friendly_mob_npc:skeleton_npc"
   ]
 }

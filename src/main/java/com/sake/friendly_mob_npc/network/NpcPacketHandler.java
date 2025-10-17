@@ -13,7 +13,7 @@ public class NpcPacketHandler {
 
     // 创建一个网络频道，用于在客户端和服务器之间传输我们的数据包
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation("npc", "main"),
+            new ResourceLocation("friendly_mob_npc", "main"),
             () -> PROTOCOL_VERSION,
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals

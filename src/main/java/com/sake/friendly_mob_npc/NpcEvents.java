@@ -8,7 +8,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraft.world.entity.monster.WitherSkeleton;
 
-@Mod.EventBusSubscriber(modid = "npc", bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = "friendly_mob_npc", bus = Mod.EventBusSubscriber.Bus.MOD)
 public class NpcEvents {
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event) {

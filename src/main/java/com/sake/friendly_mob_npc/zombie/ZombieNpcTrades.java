@@ -19,7 +19,7 @@ public class ZombieNpcTrades extends SimpleJsonResourceReloadListener {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Gson GSON = new GsonBuilder().setLenient().create();
 
-    // key: 实体ID（例如 npc:zombie_npc）
+    // key: 实体ID（例如 friendly_mob_npc:zombie_npc）
     private static final Map<ResourceLocation, List<Template>> TRADES = new ConcurrentHashMap<>();
 
     // 扫描的文件夹：data/*/trades/*.json
@@ -60,9 +60,9 @@ public class ZombieNpcTrades extends SimpleJsonResourceReloadListener {
                     list.add(t);
                 }
                 TRADES.put(entityId, list);
-                LOGGER.info("[NPC] Loaded {} trades for {}", list.size(), entityId);
+                LOGGER.info("[friendly_mob_npc] Loaded {} trades for {}", list.size(), entityId);
             } catch (Exception e) {
-                LOGGER.warn("[NPC] Failed reading trades {}: {}", fileId, e.toString());
+                LOGGER.warn("[friendly_mob_npc] Failed reading trades {}: {}", fileId, e.toString());
             }
         });
     }

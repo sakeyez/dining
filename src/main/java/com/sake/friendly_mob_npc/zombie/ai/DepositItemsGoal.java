@@ -1,4 +1,4 @@
-// 文件路径: src/main/java/com/sake/npc/zombie/ai/DepositItemsGoal.java
+// 文件路径: src/main/java/com/sake/friendly_mob_npc/zombie/ai/DepositItemsGoal.java
 // 用下面的代码完整替换掉旧的 DepositItemsGoal.java
 
 package com.sake.friendly_mob_npc.zombie.ai;
