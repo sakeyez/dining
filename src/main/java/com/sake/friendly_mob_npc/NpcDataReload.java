@@ -5,7 +5,7 @@ import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = "frienly_mob_npc", bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = "friendly_mob_npc", bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class NpcDataReload {
     @SubscribeEvent
     public static void onAddReload(AddReloadListenerEvent e) {

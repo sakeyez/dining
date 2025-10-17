@@ -5,7 +5,7 @@ license="MIT"
 [[mods]]
 modId="dining"
 version="1.0"
-displayName="Friendly_mobs"
+displayName="FB"
 authors="sake"
 description='''
 Mobs can have a meal.
