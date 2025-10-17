@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "dining:zombie_token"
+    },
+    "title": {
+      "translate": "advancements.factions.root.title"
+    },
+    "description": {
+      "translate": "advancements.factions.root.description"
+    },
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "login": {
+      "trigger": "minecraft:inventory_changed"
+    }
+  }
+}

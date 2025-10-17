@@ -1,0 +1,20 @@
+{
+  "display": {
+    "icon": { "item": "dining:skeleton_token" },
+    "title": { "translate": "advancements.factions.friendship.skeletons.title" },
+    "description": { "translate": "advancements.factions.friendship.skeletons.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "factions:root",
+  "criteria": {
+    "requirement": {
+      "trigger": "factions:become_friendly_with_faction",
+      "conditions": {
+        "faction": "skeletons"
+      }
+    }
+  }
+}
