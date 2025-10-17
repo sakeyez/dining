@@ -1,4 +1,4 @@
-package com.sake.npc.warrior;
+package com.sake.npc.zombie_warrior;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;

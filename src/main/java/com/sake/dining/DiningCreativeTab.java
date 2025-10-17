@@ -25,6 +25,8 @@ public class DiningCreativeTab {
                         output.accept(DiningItems.ENDERMAN_TOKEN.get());
                         output.accept(DiningItems.SLIME_TOKEN.get());
                         output.accept(DiningItems.BLAZE_TOKEN.get());
+                        output.accept(DiningItems.COIN.get());
+                        output.accept(DiningItems.POWDER.get());
 
                         // 添加NPC的刷怪蛋
                         output.accept(NpcItems.ZOMBIE_NPC_SPAWN_EGG.get());

@@ -1,4 +1,4 @@
-package com.sake.npc.warrior;
+package com.sake.npc.zombie_warrior;
 
 import com.google.common.collect.Sets;
 import net.minecraft.core.particles.DustParticleOptions;

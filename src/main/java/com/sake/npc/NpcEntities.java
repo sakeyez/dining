@@ -5,7 +5,7 @@ import com.sake.npc.creeper.CreeperNPCEntity;
 import com.sake.npc.enderman.EndermanNPCEntity;
 import com.sake.npc.skeleton.SkeletonNPCEntity;
 import com.sake.npc.slime.SlimeNPCEntity;
-import com.sake.npc.warrior.WarriorNPCEntity;
+import com.sake.npc.zombie_warrior.WarriorNPCEntity;
 import com.sake.npc.wither_warrior.WitherWarriorNPCEntity;
 import com.sake.npc.zombie.ZombieNPCEntity;
 import net.minecraft.world.entity.EntityType;

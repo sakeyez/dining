@@ -1,10 +1,9 @@
-package com.sake.npc.warrior;
+package com.sake.npc.zombie_warrior;
 
 import com.sake.npc.NpcEntities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -18,7 +17,6 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.UUID;
 
 public class WarriorSummonItem extends Item {
     public WarriorSummonItem(Properties properties) {

@@ -1,6 +1,6 @@
 package com.sake.npc;
 
-import com.sake.npc.warrior.WarriorNPCRenderer;
+import com.sake.npc.zombie_warrior.WarriorNPCRenderer;
 import com.sake.npc.wither_warrior.WitherWarriorNPCRenderer;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;

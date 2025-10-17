@@ -1,4 +1,4 @@
-package com.sake.npc.warrior;
+package com.sake.npc.zombie_warrior;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.sake.npc.NpcClientEventSubscriber;

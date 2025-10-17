@@ -1,4 +1,4 @@
-package com.sake.npc.warrior;
+package com.sake.npc.zombie_warrior;
 
 import com.sake.npc.NpcItems;
 import net.minecraft.ChatFormatting;
