@@ -5,6 +5,6 @@
     "minecraft:zombie_villager",
     "minecraft:husk",
     "minecraft:drowned",
-    "npc:zombie_npc"
+    "friendly_npc:zombie_npc"
   ]
 }

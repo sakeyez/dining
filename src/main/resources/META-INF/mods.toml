@@ -12,7 +12,7 @@ Mobs can have a meal.
 '''
 
 [[mods]]
-modId="friendly_npc"
+modId="friendly_mob_npc"
 version="1.0.0"
 displayName="Friendly_mobs"
 authors="sake"

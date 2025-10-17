@@ -1,0 +1,25 @@
+{
+  "entity": "friendly_mob_npc:zombie_npc",
+  "trades": [
+    {
+      "buyA": "minecraft:rotten_flesh",
+      "buyACount": 5,
+      "sell": "minecraft:emerald",
+      "sellCount": 1,
+      "maxUses": 10,
+      "xp": 2,
+      "priceMultiplier": 0.05
+    },
+    {
+      "buyA": "minecraft:emerald",
+      "buyACount": 3,
+      "buyB": "minecraft:stick",
+      "buyBCount": 8,
+      "sell": "minecraft:iron_sword",
+      "sellCount": 1,
+      "maxUses": 5,
+      "xp": 5,
+      "priceMultiplier": 0.2
+    }
+  ]
+}

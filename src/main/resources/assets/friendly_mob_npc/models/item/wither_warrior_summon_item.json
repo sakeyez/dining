@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "friendly_mob_npc:item/wither_warrior_summon_item"
+  }
+}

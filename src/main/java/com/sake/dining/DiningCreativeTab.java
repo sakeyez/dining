@@ -1,6 +1,6 @@
 package com.sake.dining;
 
-import com.sake.friendly_npc.NpcItems;
+import com.sake.friendly_mob_npc.NpcItems;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
